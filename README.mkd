@@ -1,0 +1,53 @@
+YXML
+====
+
+**YXML** (pronounced *why XML* or *Your eXtraordinary Markup transLator*) is a
+YAML to XML converter. It shouldn't have any extra dependencies apart from Python
+2.6+ and PyYAML.
+
+Let's take a look at a real world example.
+
+    $ cat web.yml
+    web-app:
+      servlet:
+        servlet-name: docjure
+        servlet-class: docjure.core
+        load-on-startup: 1
+      servlet-mapping:
+        servlet-name: docjure
+        url-pattern: /*
+    $ yxml.py web.yml | xmllint --pretty 1 -
+    <?xml version="1.0" encoding="UTF-8"?>
+    <web-app>
+      <servlet-mapping>
+        <servlet-name>docjure</servlet-name>
+        <url-pattern>/*</url-pattern>
+      </servlet-mapping>
+      <servlet>
+        <servlet-name>docjure</servlet-name>
+        <load-on-startup>1</load-on-startup>
+        <servlet-class>docjure.core</servlet-class>
+      </servlet>
+    </web-app>
+    $ yxml.py web.yml > web.xml
+    $ wc -c web.*
+    293 web.xml
+    166 web.yml
+    459 total
+    $ python -c 'print(int(100.0*166/293))'
+    56
+
+The YAML version's size is 56% of the XML document and additionally it has at
+least 156% of the output's readability. Pretty nice.
+
+Take a look at `yxml.py -h` to learn about some command line options.
+
+Further reading:
+["YAXML, the (draft) XML Binding for YAML"](http://yaml.org/xml.html).
+Patches are more than welcome.
+
+Copyrights
+----------
+
+© 2011 Jan Stępień. Feel free to use the code under terms of the
+[MIT license](http://www.opensource.org/licenses/mit-license.php).
